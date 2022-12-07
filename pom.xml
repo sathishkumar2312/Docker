@@ -1,530 +1,204 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!--
+    Copyright 2017 The MIT Internet Trust Consortium
+   
+    Portions copyright 2011-2013 The MITRE Corporation
+   
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+   
+      http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.6.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>demo-1</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>demo-1</name>
-	<description>Demo project for Spring Boot</description>
-
+	<groupId>org.mitre</groupId>
+	<artifactId>simple-web-app</artifactId>
+	<packaging>war</packaging>
+	<version>1.3.0-BUILD-SNAPSHOT</version>
 	<properties>
-		<java.version>1.8</java.version>
+		<java-version>1.8</java-version>
+		<mitreid-connect-version>1.3.1</mitreid-connect-version>
 	</properties>
-
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.mitre</groupId>
+				<artifactId>openid-connect-parent</artifactId>
+				<version>${mitreid-connect-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.mitre</groupId>
+			<artifactId>openid-connect-client</artifactId>
 		</dependency>
 
+		<!-- Spring -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				 </exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+				
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
 			<scope>runtime</scope>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>runtime</scope>
 		</dependency>
 
+		<!-- @Inject -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+				
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
-
+	
+		<!-- Test -->
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
+	        <dependency>
+        	    <groupId>org.springframework.security</groupId>
+	            <artifactId>spring-security-taglibs</artifactId>
+	            <exclusions>
+        	    	<exclusion>
+            			<groupId>org.springframework</groupId>
+	            		<artifactId>*</artifactId>
+        	    	</exclusion>
+	            </exclusions>
+        	</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<warName>${project.artifactId}</warName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+				<executions>
+					<execution>
+						<id>install</id>
+						<phase>install</phase>
+						<goals>
+							<goal>sources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.2.10.v20150310</version>
+				<configuration>
+			    <scanIntervalSeconds>10</scanIntervalSeconds>
+				    <webApp>
+				      	<contextPath>/simple-web-app</contextPath>
+				      	<webInfIncludeJarPattern>.*/spring-[^/]*\.jar$</webInfIncludeJarPattern>
+				    </webApp>
+			  </configuration>
 			</plugin>
 		</plugins>
 	</build>
-
+	<name>simple-web-app</name>
 </project>
-src_main_java_com_example_demo_ChatController.java
-package com.example.demo;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.example.demo.dto.ChatMessage;
-
-@Controller
-public class ChatController {
-	private List<ChatMessage> messages;
-
-	ChatController() {
-		messages = new ArrayList<>();
-	}
-
-	@RequestMapping("/chat/main")
-	public String showMain() {
-		return "chat/main";
-	}
-
-	@RequestMapping("/chat/addMessage")
-	@ResponseBody
-	public Map addMessage(String writer, String body) {
-		// 3가지
-		// 번호
-		// 작성자
-		// 내용
-		long id = messages.size();
-		ChatMessage newChatMessage = new ChatMessage(id, writer, body);
-		messages.add(newChatMessage);
-
-		Map rs = new HashMap<String, Object>();
-		rs.put("msg", "메세지가 입력되었습니다.");
-		rs.put("resultCode", "S-1");
-		rs.put("addedMessage", newChatMessage);
-
-		return rs;
-	}
-
-	@RequestMapping("/chat/getAllMessages")
-	@ResponseBody
-	public List<ChatMessage> getAllMessages() {
-		return messages;
-	}
-
-	@RequestMapping("/chat/getMessages")
-	@ResponseBody
-	public List<ChatMessage> getAllMessages(int from) {
-		return messages.subList(from, messages.size());
-	}
-
-	@RequestMapping("/chat/clearMessages")
-	@ResponseBody
-	public Map clearMessages() {
-		messages.clear();
-
-		Map rs = new HashMap<String, Object>();
-		rs.put("msg", "모든 메세지가 삭제되었습니다.");
-		rs.put("resultCode", "S-1");
-
-		return rs;
-	}
-}
-src_main_java_com_example_demo_Demo1Application.java
-package com.example.demo;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class Demo1Application {
-
-	public static void main(String[] args) {
-		SpringApplication.run(Demo1Application.class, args);
-	}
-
-}
-src_main_java_com_example_demo_dto_ChatMessage.java
-package com.example.demo.dto;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ChatMessage {
-	private long id;
-	private String writer;
-	private String body;
-}
-src_main_resources_application.properties
-server.port = 8042
-
-spring.mvc.view.prefix = /WEB-INF/jsp/
-spring.mvc.view.suffix = .jsp
-src_main_resources_static_css_chat_main.css
-@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
-
-html {
-    font-family: "Noto Sans KR", sans-serif;
-}
-
-/* 노말라이징 */
-body,
-ul,
-li {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-/* 라이브러리 */
-.con {
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-/* 커스텀 */
-@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
-
-body {
-    font-family: "Noto Sans KR", sans-serif;
-    overflow-y: hidden;
-}
-
-body,
-html {
-    height: 100%;
-}
-
-#chat-room {
-    height: 100%;
-    background-color: #6884b3;
-    /* 임시 */
-    outline: 2px solid black;
-    position: relative;
-}
-
-#chat-room .message-box {
-    padding: 0 0.7rem;
-    overflow-y: scroll;
-    height: calc(100% - 4.4rem);
-    box-sizing:border-box;
-    overflow-x:hidden;
-}
-
-#chat-room .message-group::before {
-    content: attr(data-date-str);
-    display: block;
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 1rem;
-    text-align: center;
-    padding: 0.3rem 0;
-    color: white;
-    font-size: 1.2rem;
-}
-
-#chat-room .chat-message {
-    margin-left: 3rem;
-    position: relative;
-    margin-bottom:1rem;
-    margin-top:1rem;
-}
-
-#chat-room .chat-message > section {
-    position: absolute;
-    top: -10%;
-    left: -3rem;
-}
-
-#chat-room .chat-message > span {
-    display: block;
-    font-weight:bold;
-    font-size:1.1rem;
-    margin-bottom:0.5rem;
-}
-
-#chat-room .chat-message > section {
-    font-size: 3rem;
-}
-
-#chat-room .chat-message::after {
-    content: "";
-    display: block;
-    clear: both;
-}
-
-#chat-room .chat-message > div {
-    background-color: white;
-    float: left;
-    padding: 0.8rem;
-    border-radius: 1rem;
-    clear: both;
-    font-weight: bold;
-    font-size: 1.2rem;
-    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
-}
-
-#chat-room .chat-message > div::before {
-    content:"";
-    display:block;
-    border:0 solid transparent;
-    border-width:15px 10px;
-    border-top-color:white;
-    transform:rotate(120deg);
-    position:absolute;
-    top:1.4rem;
-    left:-1rem;
-}
-
-#chat-room .chat-message.mine > div::before {
-    border-top-color:#fdf01b;
-    transform:rotate(-120deg);
-    left:auto;
-    right:-1.1rem;
-    top:-0.6rem;
-}
-
-#chat-room .chat-message.mine > div {
-    background-color: #fdf01b;
-    float: right;
-    box-shadow: -1px 1px 0 rgba(0, 0, 0, 0.3);
-}
-
-#chat-room .chat-message.mine > span {
-    display: none;
-}
-
-#chat-room .chat-message.mine > section {
-    display: none;
-}
-
-#chat-room .input-box {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-
-#chat-room .input-box #text-input {
-    width: 100%;
-    display: block;
-    border: 0;
-    outline: none;
-    padding-right: 8.5rem;
-    padding-left: 4.8rem;
-    padding-top: 0.1rem;
-    font-size: 1.4rem;
-    line-height: 4rem;
-    font-weight: bold;
-    box-sizing: border-box;
-}
-
-#chat-room .input-box .btn-plus {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4rem;
-    height: 100%;
-    background-color: #d1d1d1;
-}
-
-#chat-room .input-box .btn-plus > i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-45%);
-    color: white;
-    font-size: 3rem;
-}
-
-#chat-room .input-box .btn-submit {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 10px;
-    background-color: #fdf01b;
-    padding: 10px;
-    color: #bfb73d;
-    border-radius: 3px;
-    font-size: 1.3rem;
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
-    user-select: none;
-}
-
-#chat-room .input-box .btn-emo {
-    position: absolute;
-    right: 6rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    color: #cbcbcb;
-    user-select: none;
-}
-
-#style-1::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #6884b3;
-}
-
-#style-1::-webkit-scrollbar {
-    width: 12px;
-    background-color: #f5f5f5;
-}
-
-#style-1::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #555;
-}
-src_main_resources_static_js_chat_main.js
-var chatWriter = prompt('당신의 이름을 입력해주세요.');
-
-function Chat__sendMessage() {
-    // val()은 엘리먼트가 가지고 있는 value 속성의 값을 가져온다.
-    var 메세지 = $('#chat-room .input-box #text-input').val();
-    
-    메세지 = 메세지.trim(); // 메시지 양끝에 있는 공백제거
-    
-    // 메세지 변수에 들어있는 값이 ''와 같다면
-    if ( 메세지 == '' ) {
-        // 함수를 더 이상 진행시키지 않고 여기서 종료시킨다.
-        $('#chat-room .input-box #text-input').val('');
-        $('#chat-room .input-box #text-input').focus();
-        return false;
-    }
-    
-    $.post(
-    	'./addMessage',
-    	{
-    		writer:chatWriter,
-    		body:메세지
-    	},
-    	function(data) {
-    		
-    	},
-    	'json'
-    );
-    
-    // val(문자열)은 엘리먼트가 가지고 있는 value 속성의 값을 입력받은 문자열로 교체하라는 뜻입니다.
-    $('#chat-room .input-box #text-input').val('');
-    $('#chat-room .input-box #text-input').focus();
-}
-
-var Chat__lastReceivedMessageId = -1;
-
-function Chat__loadNewMessages() {
-	$.get(
-		'./getMessages',
-		{
-			from: Chat__lastReceivedMessageId + 1
-		},
-		function(data) {
-			for ( var i = 0; i < data.length; i++ ) {
-				var message = data[i];
-				Chat__lastReceivedMessageId = message.id;
-				Chat__drawMessage(message);
-			}
-			
-			setTimeout(Chat__loadNewMessages, 1000);
-		}
-	);
-}
-
-function Chat__drawMessage(message) {
-	var 메세지 = message.body;
-	var writer = message.writer;
-	
-	var whoClassName = 'mine';
-	
-	if ( writer != chatWriter ) {
-		whoClassName = 'other';
-	}
-	
-	var html = `
-	    <div class="chat-message ${whoClassName}">
-	        <section><i class="fa fa-user"></i></section>
-	        <span>${writer}</span>
-	        <div>${메세지}</div>
-	    </div>
-	    `;
-    
-    $('#chat-room .message-group:last-child').append(html);
-    
-    $('#chat-room .message-box').scrollTop(99999999999);
-};
-
-$(function() {
-	$('#chat-room .input-box .btn-submit').click(Chat__sendMessage);
-	
-	// input 창에서 키보드 눌림 이벤트 발생시 함수를 실행하도록 예약
-	$('#chat-room .input-box #text-input').keydown(function(e) {
-	    // 만약 입력한 키코드가 13, 즉 엔터라면 함수를 실행한다.
-	    if ( e.keyCode == 13 ) {
-	    	Chat__sendMessage();
-	    }
-	});
-	
-	Chat__loadNewMessages();
-});
-src_main_webapp_WEB-INF_jsp_chat_main.jsp
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<!-- 모바일에서 디바이스의 해상도가 아닌 디바이스의 실제 크기를 기준으로 너비/높이를 잡는다. -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta charset="UTF-8">
-<title>채팅방</title>
-<link rel="stylesheet" href="/css/chat/main.css">
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/js/chat/main.js"></script>
-</head>
-<body>
-	<div id="chat-room">
-		<div class="message-box" id="style-1">
-			<div class="message-group" data-date-str="2019년 07월 10일 수요일">
-				
-			</div>
-		</div>
-		<div class="input-box">
-			<input type="text" id="text-input">
-			<div class="btn-plus">
-				<i class="fa fa-plus" aria-hidden="true"></i>
-			</div>
-			<div class="btn-emo">
-				<i class="fa fa-smile-o" aria-hidden="true"></i>
-			</div>
-			<div class="btn-submit">
-				<span>전송</span>
-			</div>
-		</div>
-	</div>
-
-</body>
-</html>
-src_test_java_com_example_demo_Demo1ApplicationTests.java
-package com.example.demo;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class Demo1ApplicationTests {
-
-	@Test
-	public void contextLoads() {
-	}
-
-}
+Footer
+© 2022 GitHub, Inc.
